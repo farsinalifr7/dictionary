@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dectionary/models/dictionary_model.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         actions: [
           IconButton(
-            icon: const Icon(Icons.person),
+            icon: const Icon(Icons.person_2),
             onPressed: () {},
           ),
         ],
@@ -118,13 +119,36 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          Text(
-                            dictionaryModel!.word,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
+                          Row(
+                            children: [
+                              // Text(
+                              //   dictionaryModel!.word,
+                              //   style: const TextStyle(
+                              //       fontSize: 20, fontWeight: FontWeight.w600),
+                              // ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  dictionaryModel!.word,
+                                  style: GoogleFonts.lora(
+                                    textStyle: const TextStyle(
+                                        color: Colors.grey,
+                                        wordSpacing: 2,
+                                        letterSpacing: 1.5,
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              if (dictionaryModel!.phonetics[0].text != null)
+                                Text(dictionaryModel!.phonetics[0].text
+                                    .toString()),
+                            ],
                           ),
-                          if (dictionaryModel!.phonetics[0].text != null)
-                            Text(dictionaryModel!.phonetics[0].text.toString()),
                         ],
                       ),
                     ),
@@ -138,7 +162,12 @@ class _HomePageState extends State<HomePage> {
                           }),
                     )
                   ],
-                ))
+                )),
+          if (dictionaryModel == null)
+            Expanded(
+              flex: 3,
+              child: Container(),
+            )
         ],
       ),
     );
@@ -148,27 +177,47 @@ class _HomePageState extends State<HomePage> {
     String wordDefinition = "";
     for (var element in meaning.definitions) {
       int index = meaning.definitions.indexOf(element);
-      wordDefinition += " ${index + 1}.${element.definition}\n";
+      wordDefinition += " ${element.definition}\n";
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                meaning.partOfSpeech,
-                style: const TextStyle(
-                    color: Colors.deepPurple,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
-              ),
-              Text(wordDefinition),
-              if (meaning.definitions[0].example != null)
-                Text(
-                  "Example: ${meaning.definitions[0].example}",
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                ),
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+            //border: Border.all(color: Colors.grey),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 10,
+              )
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  meaning.partOfSpeech,
+                  style: GoogleFonts.lora(
+                    textStyle: const TextStyle(
+                        color: Colors.deepPurple,
+                        wordSpacing: 2,
+                        letterSpacing: 1.5,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Text(wordDefinition),
+                if (meaning.definitions[0].example != null)
+                  Text(
+                    "Example: ${meaning.definitions[0].example}",
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  ),
+              ],
+            ),
           ),
         ),
       );
